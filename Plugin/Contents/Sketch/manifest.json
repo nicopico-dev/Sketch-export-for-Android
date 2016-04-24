@@ -1,0 +1,23 @@
+{
+  "name": "Export Android resources",
+  "description": "Allows to export resources for Android",
+  "author": "Nicolas PICON",
+  "authorEmail": "nicopico.dev@gmail.com",
+  "version": "1.0",
+  "identifier": "fr.nicopico.sketch.android_export",
+  "compatibleVersion": "3.7",
+  "commands": [
+    {
+      "name": "Export Android resources",
+      "identifier": "export",
+      "shortcut": "cmd alt e",
+      "script": "main.js"
+    }
+  ],
+  "menu": {
+    "isRoot": true,
+    "items": [
+      "export"
+    ]
+  }
+}
