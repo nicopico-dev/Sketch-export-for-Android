@@ -1,2 +1,3 @@
 sketch-headers/
 .DS_Store
+*.sublime-*
