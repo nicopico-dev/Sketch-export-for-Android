@@ -1,4 +1,6 @@
-var prefixMap = {
+@import 'library/SVGUtils.js'
+
+var drawableFoldersMap = {
     null:       'drawable-anydpi',
     '':         'drawable-anydpi',
     '@1x':      'drawable-mdpi',
@@ -36,7 +38,7 @@ class DrawableExporter {
 
         // format: MSExportFormat
         this.scale = exportRequest.scale()
-        this.prefix = exportRequest.name().replace(name, '')
+        this.suffix = exportRequest.name().replace(name, '')
         this.type = exportRequest.format()
     }
 
@@ -47,7 +49,7 @@ class DrawableExporter {
             .replace(/_+/g,'_')
 
         if (this.type == 'png' || this.type == 'jpg') {
-            var outputFile = outputDir + '/' + prefixMap[this.prefix] + '/' + filename + '.' + this.type
+            var outputFile = outputDir + '/' + drawableFoldersMap[this.suffix] + '/' + filename + '.' + this.type
             log('Exporting ' + this.name + ' to ' + outputFile)
             this.document.saveExportRequest_toFile(this.exportRequest, outputFile)
         }
@@ -59,14 +61,14 @@ class DrawableExporter {
             var svgFile = NSTemporaryDirectory() + filename + '.svg'
             this.document.saveExportRequest_toFile(this.exportRequest, svgFile)
 
-            // Convert to VectorDrawable and delete the SVG file
+            // Read and delete the SVG file
             var encoding = NSUTF8StringEncoding
             var svgContent = NSString.stringWithContentsOfFile_encoding_error(svgFile, encoding, null)
             NSFileManager.defaultManager().removeItemAtPath_error(svgFile, null)
 
-            // Write the VectorDrawable file
-            //var result = generateCode(svgContent)
-            //result.code.writeToFile_atomically_encoding_error(outputFile, false, encoding, null)
+            // Convert the SVG to a VectorDrawable file
+            var result = convertFromSVG(svgContent)
+            result.writeToFile_atomically_encoding_error(outputFile, false, encoding, null)
         }
     }
 }
